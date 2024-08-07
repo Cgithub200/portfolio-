@@ -1,0 +1,72 @@
+
+* {
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .resp {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #a19d9d;
+        display: flex; /* Use flexbox */
+    }
+    
+    .resp img {
+        max-width: 50%; /* Adjust image width */
+        border-radius: 8px; /* Optionally, apply border-radius */
+        margin-right: 20px; /* Add space between image and caption */
+        flex-shrink: 0; /* Prevent image from shrinking */
+    }
+    
+    .resp .scrollable-caption {
+        flex: 1; /* Allow paragraph to take remaining space */
+        overflow-y: auto; /* Make the paragraph scrollable vertically */
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        max-height: 200px; /* Set a fixed height for the scrollable area */
+    }
+
+
+    h1 {
+        text-align: center;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+    }
+    input[type="text"] {
+        width: calc(100% - 90px);
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .result {
+        margin-top: 20px;
+    }
+}

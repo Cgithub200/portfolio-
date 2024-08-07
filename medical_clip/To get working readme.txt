@@ -1,0 +1,1 @@
+In order to get the system working you need to download to roco dataset in this folder my_clip\static\roco-dataset\data\train\radiology\images_ and then run resize using the datahandler

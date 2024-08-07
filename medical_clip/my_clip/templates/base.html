@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Image Retrieval</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/base_style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Medical Image Retrieval</h1>
+        <div class="form-group">
+            {% csrf_token %}
+            
+            <div><label for="text-prompt">Enter Text Prompt:</label>
+            <input type="text" id="text-prompt" pattern="[A-Za-z]+" title="Please enter only letters" placeholder="Enter your text prompt"></div>
+            <div><label for="return_volume">How many responses:</label>
+            <input type="text" id="return_volume" pattern="[1-9]+" title="Please enter only letters" placeholder="How many results"></div>
+            <div><label for="toggle-switch">External sources:</label>
+            <label class="switch">
+                <input type="checkbox" id="external switch">
+                <span class="slider round"></span>
+            </label></div>
+            <button class="btn" onclick="ret_image()">Submit</button>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+    
+    <div class="container">
+        <h1>Expand dataset</h1>
+        <div class="form-group">
+            {% csrf_token %}
+            <label for="text-prompt">Enter Text Prompt:</label>
+            <input type="text" id="text-prompt-2" pattern="[A-Za-z]+" title="Please enter only letters" placeholder="Enter your text prompt">
+            <label for="return_volume">max responses:</label>
+            <input type="text" id="return_volume-2" pattern="[1-9]+" title="Please enter only letters" placeholder="How many results"> 
+            <button class="btn" onclick="exp_dataset()">Submit</button>
+        </div>
+    </div>
+
+    
+    <script> 
+        function exp_dataset() {
+            const csrftoken = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+            let textPrompt = document.getElementById('text-prompt-2').value;
+            let response_vol = document.getElementById('return_volume-2').value;
+            fetch('/add_image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ prompt: textPrompt , quantity: response_vol})
+            })
+
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                /*displayResult(data.result.prompt); */
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function ret_image() {
+            let csrftoken = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+            let textPrompt = document.getElementById('text-prompt').value;
+            let response_vol = document.getElementById('return_volume').value;
+            let external = document.getElementById('external switch').checked
+            
+            
+            fetch('/ret_image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ prompt: textPrompt , quantity: response_vol , external: external})
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerHTML = '';
+                console.log(data)
+
+                var IMAGE_URL = "{{ IMAGE_URL }}";
+                for (item in data){
+                    let url = data[item].address;
+                    let caption = data[item].caption;
+                 
+                    let img = document.createElement('img');
+                    img.src = url
+                  
+                    let Search_result = document.createElement('div');
+                    Search_result.className = "resp"
+                    
+                    //img.src = url;
+                    let caption_element = document.createElement('p');
+                    caption_element.textContent = caption;
+                    caption_element.className = 'scrollable-caption'
+                    Search_result.appendChild(img);
+                    Search_result.appendChild(caption_element);
+           
+                    document.getElementById('result').appendChild(Search_result);
+                }
+
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function displayResult(result) {
+            console.log("good");
+        }
+        
+    </script>
+</body>
+</html>

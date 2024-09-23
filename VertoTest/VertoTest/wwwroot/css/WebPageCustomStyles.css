@@ -1,0 +1,332 @@
+﻿
+.swiper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+.standard-button-size {
+    width: 150px;
+    height: 40px;
+    font-size: 12px
+}
+
+
+.button-container {
+    text-align: left; /* Aligns the button to the left within its container */
+}
+.darken-image {
+    filter: brightness(70%); /* Adjust the percentage to control the darkness */
+}
+.btn-transparent {
+    background-color: transparent; /* Makes the button background transparent */
+    border: none; /* Removes the button border */
+    color: white; /* Sets the text color (adjust as needed) */
+    font-size: 16px; /* Adjust the font size as needed */
+    padding: 10px 20px; /* Adjust padding as needed */
+    cursor: pointer; /* Shows a pointer cursor on hover */
+}
+
+.no-padding {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style-type: none;
+}
+
+    .no-padding li {
+        margin: 0;
+        padding: 0;
+    }
+
+    .no-padding ul {
+        margin: 0;
+        padding: 0;
+    }
+    .no-padding img {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+.custom_cont {
+    width: 100%;
+    height: 819px;
+    overflow: hidden;
+    position: relative;
+}
+
+.custom_cont img {
+    max-width: none !important;
+    height: 819px;
+    position: absolute;
+    width: 1920px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+@media (min-width: 1920px) {
+    /*For use when the user has unusualy large screen*/
+    .custom_cont img {    
+        width: 100%;
+    }
+}
+
+.rounded-div {
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 70px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 2;
+}
+
+.text-white {
+    color: white;
+}
+
+.text-yellow {
+    color: darkgoldenrod !important;
+}
+
+.header-fill {
+    width: 100%;
+    background-color: white;
+    position: fixed !important;
+    top: 0;
+    justify-content: center;
+    z-index: 999;
+}
+
+li.nav-item.dropdown .dropdown-menu {
+    border: none;
+}
+
+.header-fixed {
+    top: 0;
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+@media (max-width: 930px) {
+
+    .header-fill {
+        width: 100%;
+        background-color: white;
+        position: relative !important;
+        top: 0;
+        text-align: center;
+        justify-content: center;
+        z-index: 999;
+    }
+
+}
+
+    /* Ensures the content is centered and does not exceed 1280px */
+    .header-fixed > * {
+        max-width: 100%;
+    }
+
+.top-padded-30{
+    padding-top: 30px;
+}
+.bottom-padded-30 {
+    padding-bottom: 30px;
+}
+
+.rounded-bottom-button {
+    border-bottom-left-radius: 0.475rem; 
+    border-bottom-right-radius: 0.475rem; 
+}
+.rounded-left-button {
+    border-bottom-left-radius: 0.475rem; 
+    border-top-left-radius: 0.475rem; 
+}
+
+.rounded-top {
+    border-top-left-radius: 1.375rem !important;
+    border-top-right-radius: 1.375rem !important;
+}
+
+.left-padded-10 {
+    padding-left: 10px;
+}
+
+.dropdown-menu {
+    right: 0;
+    left: auto;
+}
+.standard-height {
+    max-height: 819px;
+    padding-bottom: 10px;
+}
+
+.colour-grey {
+    background-color: rgba(244, 244, 244, 1);
+}
+.content-block img {
+    max-height: 819px;
+}
+
+.colour-dark-grey {
+    background-color: #333333;
+    border: none;
+}
+.colour-dark-blue {
+    background-color: #2A4351;
+    border: none;
+}
+
+.colour-dark-teal {
+    background-color: #18BEAB;
+    border: none;
+}
+
+.bi {
+    font-size: 16px; /* Ensure the size matches your design */
+    line-height: 24px; /* Adjust to match the design */
+    width: auto; /* Or a specific size if needed */
+    overflow: visible;
+}
+
+.Sidepanel {
+    width: 200px;
+    font-size: 15px;
+    height: 50px;
+}
+
+.centered-div {
+    width: 80%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+.panel-width {
+    max-width: 948px
+}
+
+.colour-mustard {
+    background-color: #DDB62E !important;
+    border: none;
+}
+
+.z-buffer-100 {
+    z-index: 999;
+}
+
+.overlap {
+    position: absolute;
+    right: 3%;
+    width: 200px;
+    height: 50px;
+    z-index: 5;
+    transform: translateY(-50%);
+}
+.hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.custom-heading {
+    font-family: 'DM Serif Display', serif;
+    margin-bottom: 20px;
+}
+.dark-blue-text {
+    color: #2A4351; 
+}
+.rounded-button {
+    border-radius: 10%;
+}
+
+.lage-margin-bottom {
+    margin-bottom: 70px;
+}
+
+.MainContent {
+    padding-left: 3%;
+    padding-top: 120px;
+    padding-right: 3%;
+    box-sizing: border-box;
+    margin: 0;
+    border-radius: 15px;
+}
+@media (max-width: 930px) {
+    .MainContent {
+        padding-left: 3%;
+        padding-top: 0px;
+        padding-right: 3%;
+        box-sizing: border-box;
+        margin: 0;
+        border-radius: 15px;
+    }
+}
+
+.image-container {
+    position: relative;
+    width: 100%; 
+}
+    .image-container img {
+        width: 100%; 
+        height: auto; 
+        z-index: 1;
+    }
+    .image-container ul {
+        margin-left: 0px !important;
+    }
+
+.small-overlay {
+    position: absolute;
+    bottom: 0;
+    max-width: 100%;
+    color: #f1f1f1;
+    font-size: 15px;
+    padding: 20px;
+    text-align: center;
+    z-index: 3;
+    max-width: 600px;
+    margin: 0 auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    font-size: calc((1vh)) ; 
+}
+.grid-x {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+}
+.medium-overlay {
+    position: relative;
+    top: 50%;
+    max-width: 100%;
+    color: #f1f1f1;
+    transition: .5s ease;
+    opacity: 70;
+    font-size: 15px;
+    padding: 20px;
+    text-align: center;
+    z-index: 3;
+    max-width: 600px;
+    margin: 0 auto;
+}

@@ -1,0 +1,40 @@
+﻿@model ImageViewModel
+
+@{
+    ViewData["Title"] = "Add New Image";
+}
+<div class="MainContent">
+    <h1>@ViewData["Title"]</h1>
+
+    <form asp-action="AddImage" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label asp-for="AltText" class="control-label"></label>
+            <input asp-for="AltText" class="form-control" />
+            <span asp-validation-for="AltText" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StaticContentID" class="control-label"></label>
+            <input asp-for="StaticContentID" type="number" class="form-control" />
+            <span asp-validation-for="StaticContentID" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ImgFile" class="control-label"></label>
+            <input asp-for="ImgFile" type="file" class="form-control-file" />
+            <span asp-validation-for="ImgFile" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Add Image</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ContentPanels>
+
+@{
+    ViewData["Title"] = "Panel List";
+}
+<div class="MainContent">
+    <h1>@ViewData["Title"]</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Active</th>
+                <th>Order</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <form asp-action="EditPanel" method="post">
+                        <td><input type="number" name="ContentItemID" value="@item.ContentItemID" /></td>
+                        <td><input type="text" name="Title" class="form-control" value="@item.Title" /></td>
+
+                        <td><input type="checkbox" name="IsActive" value="true" /></td>
+                        <td><input type="number" name="Order" class="form-control" value="@item.Order" /></td>
+
+                        <td>
+                        <button type="submit" class="btn btn-success">Save</button>
+                        </td>
+                    </form>
+                    <td>
+                        <form asp-action="DeletePanel" method="post" onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="ContentItemID" value="@item.ContentItemID" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,293 @@
+﻿@{
+    ViewData["Title"] = "Verto Home Page";
+
+}
+
+
+@{
+    var Panels = await contentPanelService.List();
+    var PanelsCount = Panels.Count;
+    
+    
+    var SideTabs = await staticContentService.ListWithClass("SideBarElement");
+    var sideTabsCount = SideTabs.Count; 
+}
+
+
+<div class="MainContent">
+    <div class="rounded-div">  
+    <h1 class="hidden">Verto Home Page</h1>
+
+    @if (PanelsCount >= 1)
+        {
+        var staticItems = Panels[0].StaticContents.ToList();
+        var staticItemCount = staticItems.Count;
+   
+        <!-- This section is responsible for displaying the slider image  -->
+        <div class="swiper w-100 standard-height">
+        <div class="swiper-wrapper w-100 no-padding">
+            <!-- Allows for multiple sliders for the panel if needed -->
+            @for (int i = 0; i < staticItemCount; i++)
+            {
+                var staticItem = staticItems[i];
+                <div class="swiper-slide w-100 custom_cont">
+                    <div class="overlay">@staticItem.Title</div>
+                    <ul class="w-100 nav">
+                    <!-- Will create a new image in the slider for each entry in the database  -->
+                    @foreach (var image in staticItem.Images)  
+                    {
+                        <li>
+                            <img src="@Url.Content(image.FilePath)" alt=" @image.AltText" class="darken-image">
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        </div>
+        <div class="swiper-pagination"></div>
+        </div>
+            }
+
+
+           
+
+
+
+        <!-- This Adds in a side element  -->
+        @{
+            @if (sideTabsCount > 0)
+            {
+                <div class="overlap d-flex align-items-center justify-content-center">
+                 <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle rounded-left-button Sidepanel colour-dark-teal" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    EXPLORE OUR WORK <i class="bi bi-chat-dots"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @foreach(var item in SideTabs)
+                            {
+                            <li><a class="dropdown-item" href="@item.Body">
+                                <i class="bi bi-chat-dots icon z-buffer-100"></i> @item.Title
+                            </a></li>
+                            }
+                </ul>
+                </div>
+
+                </div>
+
+            }
+        }
+        
+
+    <!-- This is the begining of the second panel  -->
+        @if (PanelsCount > 1)
+            {
+            <div class="content-block colour-grey top-padded-30 bottom-padded-30">
+                <div class="container">
+                @{
+                    var panel = Panels[1];
+                    var staticItems = panel.StaticContents.ToList();
+                    var staticItemCount = staticItems.Count;
+                }
+                <!-- Allows the panel to feature multiple items for future growth -->
+                @for (int i = 0; i < staticItemCount; i++)
+                {
+                    var staticItem = staticItems[i];
+
+                    <div class="grid-x grid-padding-x padding-remove align-middle rectangle">
+                        <div class="cell small-12 medium-12 large-6 d-flex align-middle justify-center">
+                        <!-- Allows for multiple images to be displayed to allow for future growth -->
+                        @foreach (var image in staticItem.Images)
+                        {
+                            <div class="col d-flex justify-content-center align-items-center">
+                                    <img src="@Url.Content(image.FilePath)" alt="@image.AltText" class="img-fluid small-width">
+                            </div>
+                        }
+                        </div>
+                        <div class="cell small-12 medium-12 large-6">
+                            <h2 class="custom-heading dark-blue-text lage-margin-bottom">@staticItem.Title</h2>
+                            <div class="lage-margin-bottom centered-div ">
+                                <div class="lage-margin-bottom">@staticItem.Body</div>
+                                <!-- This with add the button to the final item -->
+                                @if (i == staticItemCount - 1)
+                                {
+                                                <button type="button" class="btn btn-primary rounded-button colour-mustard standard-button-size">WHAT WE DO</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
+            
+            </div>
+            }
+    <!-- This is the begining of the 3rd panel  -->
+        @if (PanelsCount > 2)
+            {
+        <div class="standard-height">
+            @{
+                var panel = Panels[2];
+                var staticItems = panel.StaticContents.ToList();
+                var staticItemCount = staticItems.Count;
+
+            }
+            <div class="container">
+
+            <div class=" text-center ">
+                <h2 >@panel.Title</h2>
+            </div>
+                <div class="grid-x grid-padding-x padding-remove align-middle rectangle content-block">
+                    <!-- Ensures that items are assigned the apropriate hide condition even if there is fiewer then expected -->
+                    @for (int i = 0; i < staticItemCount; i++)
+                    {
+                        var hidden = "";
+                        if (i >= 2*(@staticItemCount / 3))
+                        {
+                            hidden = " show-for-medium ";
+                        }
+                        else if (i >= (@staticItemCount / 3))
+                        {
+                            hidden = " show-for-large ";
+                        }
+
+                        var staticItem = staticItems[i];
+                        <div class="cell small-12 medium-6 large-4 @hidden section">
+                            <div class="image-container">
+                                <div class="small-overlay">
+                                    <h3>@staticItem.Title</h3>
+                                    <p>@staticItem.Body</p>
+                                    <div class="button-container">
+                                    <button type="button" class="btn btn-transparent">VIEW MORE <i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <ul class="w-100 nav">
+                                    <!-- Allows for future growth ensuring mutliple images can be displayed in one item if required -->
+                                    @foreach (var image in staticItem.Images)
+                                    {
+                                        <li>
+                                            <div class="col d-flex justify-content-center align-items-center">
+                                                <img src="@Url.Content(image.FilePath)" alt=" @image.AltText">
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+            }
+        @if (PanelsCount > 3)
+        {
+            <div class="colour-dark-blue p-5 d-flex justify-content-center rounded-top">
+            <div class="panel-width w-100">  
+            @{
+                var panel = Panels[3];
+                var staticItems = panel.StaticContents.ToList();
+                var staticItemCount = staticItems.Count;
+            }
+            <!-- Allows for future growth allowing the tab bar to be expanded a layer -->
+                @for (int i = 0; i < staticItemCount; i++)
+                {
+                var staticItem = staticItems[i];
+                <div class="grid-x grid-padding-x">
+                        @foreach (var image in staticItem.Images)
+                        {
+                        <div class="cell small-12 medium-3 large-3 img-container no-padding">
+                            <div class="col d-flex justify-content-center align-items-center">
+                                <img src="@Url.Content(image.FilePath)" alt=" @image.AltText">
+                            </div>
+                        </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+         }
+    <!-- This is the begining of the 4th panel  -->
+        @if (PanelsCount > 4)
+        {
+        <div>
+            @{
+                var panel = Panels[4];
+                var staticItems = panel.StaticContents.ToList();
+                var staticItemCount = staticItems.Count;
+            }
+            <!-- Allows for future growth by allowing videos to be stacked on top of each other  -->
+            @for (int i = 0; i < staticItemCount; i++)
+            {
+                var staticItem = staticItems[i];
+
+                <div class="w-100 custom_cont">
+        
+                    <div class="medium-overlay">
+                        <h3>@staticItem.Title</h3>
+                        <p>@staticItem.Body</p>
+
+
+                        <div class="d-flex justify-content-center">
+                            <div class="grid-x grid-padding-x">
+                            <div class="cell small-12 medium-12 large-6">
+                                <button type="button" class="btn btn-primary rounded-button colour-dark-teal standard-button-size">WATCH THE VIDEO</button>
+                            </div>
+                            <div class="cell small-12 medium-12 large-6">
+                                        <button type="button" class="btn btn-primary rounded-button colour-mustard standard-button-size">ABOUT iOTA</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <ul class="w-100 nav">
+                        <!-- Allows for mutliple images to represent the video  -->
+                        @foreach (var image in staticItem.Images)
+                        {
+                            <li>
+                                <img src="@Url.Content(image.FilePath)" alt=" @image.AltText">
+                            </li>
+                        }
+                    </ul>
+         
+                </div>
+            }
+        </div>
+        }
+    <!-- This is the begining of the 5th panel  -->
+    @if (PanelsCount > 5)
+        {
+        <div class="colour-dark-grey p-5">
+            @{
+                var panel = Panels[5];
+                var staticItems = panel.StaticContents.ToList();
+                var staticItemCount = staticItems.Count;
+                int itemSizeLarge = (int)Math.Floor( 12 / (double)staticItemCount);
+                int itemSizeMedium = itemSizeLarge * 2;
+                int itemSizeSmall = itemSizeMedium * 2;
+            }
+                <div class="grid-x grid-padding-x">
+                <!-- For future growth the footer will be expanded to hold the required items  -->
+                    @for (int i = 0; i < staticItemCount; i++)
+                    {
+                        var staticItem = staticItems[i];
+                    <div class="cell small-@itemSizeSmall medium-@itemSizeMedium large-@itemSizeLarge img-container text-white">
+                        <ul class="w-100 nav no-padding">
+                            <!-- To allow for future growth multiple images can be placed in one area  -->
+                            @foreach (var image in staticItem.Images)
+                            {
+                                <li>
+                                    <div class="col d-flex justify-content-center align-items-center">
+                                        <img src="@Url.Content(image.FilePath)" alt=" @image.AltText">
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <h3>@staticItem.Title</h3>
+                        <p>@staticItem.Body</p>
+                    </div>
+                    }
+                </div>
+        </div>
+        }
+    </div>
+</div>

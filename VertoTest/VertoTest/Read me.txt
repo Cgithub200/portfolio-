@@ -1,0 +1,14 @@
+Read me
+
+Database follows the following structure 
+
+ContentPanel: Large scale item that has a relationship to many smaller components that make up that panel
+StaticContent: Stores info for small components eg images and/or text
+Image: Stores relevant image info
+
+You can adjust the page simply by adding/editing/deleting static elements and images and giving them the appropriate relations to the components 
+You can do this manually or use the views i created which you can switch to by using the navigation bar up top and get back using home 
+The item lists are where you make any alterations you want just click save or delete. Adding items is a seperate view
+
+here are database details it was external and the backup is in the data folder. It will have to be imported and likely have the connection string updated to match whatever you use
+Server is SQLEXPRESS	Database is VertoDb

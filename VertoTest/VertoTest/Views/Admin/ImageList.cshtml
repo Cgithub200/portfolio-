@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Image>
+
+@{
+    ViewData["Title"] = "Image List";
+}
+<div class="MainContent">
+    <h1>@ViewData["Title"]</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>FileName</th>
+                <th>FilePath</th>
+                <th>AltText</th>
+                <th>Static item ID</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <form asp-action="EditImage" method="post">
+                    <td><input type="number" name="ImageId" value="@item.ImageId" /></td>
+                    <td><input type="text" name="FileName" class="form-control" value="@item.FileName" /></td>
+                    <td><input type="text" name="FilePath" class="form-control" value="@item.FilePath" /></td>
+                    <td><input type="text" name="AltText" class="form-control" value="@item.AltText" /></td>
+                    <td><input type="number" name="StaticContentID" class="form-control" value="@item.StaticContentID" /></td>
+
+                    <td>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </td>
+                    </form>
+                    <td>
+                        <form asp-action="DeleteImage" method="post" onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="ImageId" value="@item.ImageId" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

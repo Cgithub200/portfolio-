@@ -1,0 +1,51 @@
+﻿@model IEnumerable<StaticContent>
+
+@{
+    ViewData["Title"] = "Static Elements List";
+}
+<div class="MainContent">
+    <h1>@ViewData["Title"]</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Body</th>
+                <th>StaticClass</th>
+                <th>Order</th>
+                <th>Date Updated</th>
+                <th>SliderItemID</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <form asp-action="ModStaticElement" method="post">
+                        <td><input type="number" name="ContentId" value="@item.ContentId" /></td>
+                        <td><input type="text" name="Title" class="form-control" value="@item.Title" /></td>
+                        <td><textarea name="Body" class="form-control">@item.Body</textarea></td>
+                        <td><input type="text" name="StaticClass" class="form-control" value="@item.StaticClass" /></td>
+                        <td><input type="number" name="Order" class="form-control" value="@item.Order" /></td>
+                        <td>@item.DateUpdated.ToString("MM/dd/yyyy")</td>
+                    <td><input type="number" name="SliderItemID" value="@item.SliderItemID" /></td>
+                        <td>
+                        <button type="submit" class="btn btn-success">Save</button>
+
+                    </td>
+                    </form>
+                    <td>
+                        <form asp-action="ModStaticElement" method="post" onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="ContentId" value="@item.ContentId" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

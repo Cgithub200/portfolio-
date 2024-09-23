@@ -1,0 +1,41 @@
+﻿@model StaticContent
+
+@{
+    ViewData["Title"] = "Edit Static Content";
+}
+<div class="MainContent">
+    <h1>@ViewData["Title"]</h1>
+
+    <form asp-action="ModStaticElement" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="ContentId" />
+
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Body" class="control-label"></label>
+            <textarea asp-for="Body" class="form-control"></textarea>
+            <span asp-validation-for="Body" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order" class="control-label"></label>
+            <input asp-for="Order" type="number" class="form-control" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

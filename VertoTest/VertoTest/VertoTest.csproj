@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jQuery" Version="3.7.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\circle-icons.png" />
+    <None Include="wwwroot\assets\Group 456.png" />
+    <None Include="wwwroot\assets\Group 457.png" />
+    <None Include="wwwroot\assets\Group 458.png" />
+    <None Include="wwwroot\assets\Group 459.png" />
+    <None Include="wwwroot\assets\image1.png" />
+    <None Include="wwwroot\assets\image2.png" />
+    <None Include="wwwroot\assets\image3.png" />
+    <None Include="wwwroot\assets\image4.png" />
+    <None Include="wwwroot\assets\image5.png" />
+    <None Include="wwwroot\assets\logo.png" />
+    <None Include="wwwroot\assets\logo.svg" />
+    <None Include="wwwroot\assets\search.png" />
+    <None Include="wwwroot\assets\shadowhor.png" />
+    <None Include="wwwroot\assets\shadowsmall.png" />
+    <None Include="wwwroot\assets\shadowtall.png" />
+  </ItemGroup>
+
+</Project>

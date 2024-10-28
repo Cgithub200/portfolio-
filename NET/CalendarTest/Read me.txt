@@ -1,0 +1,20 @@
+Read me
+
+Database details 
+The database is a external sql server which is to large to send so i have attached a backup in the data folder to get it working you will need to load the backup onto a sql server. You may have to update the connection string to
+work with your sql server you can find it in appsettings it looks like.
+    "VertoDbConnection": "Server=DESKTOP-KVOP8LD\\SQLEXPRESS;Database=GemporiaDB;Trusted_Connection=True;TrustServerCertificate=True"
+
+Database follows the following structure 
+Events: Holds all date related to a event for the calendar
+
+How to use
+(1) Dates with events will be green
+(2) Select a date you can change month and year up top
+
+(3) You can click add event and fill out the form to create a new event of any start time and duration eg 12m or maybe a whole year
+(4) To edit a event just click on it and you will get another form with a protected event summary
+(5) You can also press the delete button to remove the event
+
+All models are closed by clicking elsewhere.
+

@@ -1,0 +1,386 @@
+﻿@model IEnumerable<CalendarEventViewModel>
+
+@{
+    ViewData["Title"] = "Panel List";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Timetable</title>
+
+</head>
+
+<body>
+    <button class="back-button" id="backButton">Back to Home</button>     <!-- Back Button -->
+    <button class="add-button" id="addButton">Add Event</button> <!-- Add Event Button -->
+
+    <!-- Timetable -->
+    <div class="scrollable-timetable">
+        <div class="timetable">
+            <div class="hours">
+                <div class="hour" data-time="00:00">12 AM</div>
+                    <div class="hour" data-time="01:00">1 AM</div>
+                    <div class="hour" data-time="02:00">2 AM</div>
+                    <div class="hour" data-time="03:00">3 AM</div>
+                    <div class="hour" data-time="04:00">4 AM</div>
+                    <div class="hour" data-time="05:00">5 AM</div>
+                    <div class="hour" data-time="06:00">6 AM</div>
+                    <div class="hour" data-time="07:00">7 AM</div>
+                    <div class="hour" data-time="08:00">8 AM</div>
+                    <div class="hour" data-time="09:00">9 AM</div>
+                    <div class="hour" data-time="10:00">10 AM</div>
+                    <div class="hour" data-time="11:00">11 AM</div>
+                    <div class="hour" data-time="12:00">12 PM</div>
+                    <div class="hour" data-time="13:00">1 PM</div>
+                    <div class="hour" data-time="14:00">2 PM</div>
+                    <div class="hour" data-time="15:00">3 PM</div>
+                    <div class="hour" data-time="16:00">4 PM</div>
+                    <div class="hour" data-time="17:00">5 PM</div>
+                    <div class="hour" data-time="18:00">6 PM</div>
+                    <div class="hour" data-time="19:00">7 PM</div>
+                    <div class="hour" data-time="20:00">8 PM</div>
+                    <div class="hour" data-time="21:00">9 PM</div>
+                    <div class="hour" data-time="22:00">10 PM</div>
+                    <div class="hour" data-time="23:00">11 PM</div>
+            </div>
+
+            <div class="events-container"> <!-- Timetable of events -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Modal for adding events -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <form id="addEventForm">
+                 @Html.AntiForgeryToken()
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+    
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required>
+    
+                <label for="duration">Duration (hours):</label>
+                <input type="number" id="duration" name="duration" min="0" step="0.01" required>
+
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description">
+
+                <button type="submit">Add Event</button>
+            </form>
+        </div>
+    </div>
+    <!-- Popup Modal for modifying events -->
+    <div id="editEventModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Edit Event</h2>
+
+            <form id="editEventForm">
+                 @Html.AntiForgeryToken()
+
+                <input type="hidden" id="eventToken" required> 
+
+                <label for="editTitle">Title:</label>
+                <input type="text" id="editTitle" required>
+
+                <label for="editDescription">Description:</label>
+                <input type="text" id="editDescription" required>
+
+                <label for="editStartTime">Start Time:</label>
+                <input type="datetime-local" id="editStartTime" required>
+
+                <label for="editEndTime">End Time:</label>
+                <input type="datetime-local" id="editEndTime" required>
+
+                <button type="submit" id="saveChanges">Save Changes</button>
+            </form>
+
+            <button id="deleteEvent">Delete Event</button>
+        </div>
+    </div>
+
+    <script>
+        const backButton = document.getElementById('backButton');
+        const addButton = document.getElementById('addButton');
+        const eventModal = document.getElementById('eventModal');
+        const saveEventButton = document.getElementById('saveEventButton');
+        const container = document.querySelector('.events-container');
+        const deleteButton = document.getElementById('deleteEvent');
+        const editEventForm = document.getElementById('editEventForm');
+        const addEventForm = document.getElementById('addEventForm');
+        fetchEvents();
+
+        function modalCloseSetup(modalId) {
+            const modal = document.getElementById(modalId);
+            // closes the model if user clicks elsewhere
+            window.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        }
+        modalCloseSetup('eventModal');
+        modalCloseSetup('editEventModal');
+        backButton.addEventListener('click', () => {
+            window.location.href = '/home'; // Returns to the day selection
+        });
+
+        // Shows add event model on button click
+        addButton.addEventListener('click', () => {
+            eventModal.style.display = 'flex'; 
+        });
+
+        //These helper functions convert dates into a single numerical value
+        function timeToMinutes(time) {
+            const [hours, minutes] = time.split(':').map(Number); 
+            return hours * 60 + minutes; 
+        }
+        function minutesToTime(totalMinutes) {
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;  
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        }
+
+        // This function appends the time onto the currently selected date
+        function getDateTime(time) {
+            const params = new URLSearchParams(window.location.search);
+            var selectedDate = params.get('date');
+            const minites = timeToMinutes(time);
+            var daySpan = Math.floor(minites / 1440);
+            var remainder = minutesToTime(minites % 1440);
+            var [year, month, day] = selectedDate.split('-');
+            month = month.padStart(2, '0');
+            day = day.padStart(2, '0');
+            selectedDate = `${year}-${month}-${day}`;     
+            const startDateTime = new Date(`${selectedDate}T${remainder}:00`);
+            startDateTime.setDate(startDateTime.getDate() + daySpan);
+            return startDateTime;
+        }
+
+        // This sends a request to have the selected event deleted
+        deleteButton.addEventListener('click', async () => {
+            const token = document.getElementById('eventToken').value;
+            const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            try {
+                const response = await fetch('/Day/DeleteEvent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': antiForgeryToken
+                    },
+                    body: JSON.stringify({ Token: token })
+                });
+                if (response.ok) {
+                    alert("Event deleted successfully!");
+                    document.getElementById('editEventModal').style.display = 'none';
+                    fetchEvents();
+                } else {
+                    alert("Event deletion failed!");
+                }
+            } catch (error) {
+                console.error("Error deleting event:", error);
+            }
+        });
+
+        // This sends a request to edit the database element of the selected event
+        editEventForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const token = document.getElementById('eventToken').value; 
+            const eventData = {
+                Title: document.getElementById('editTitle').value,
+                Description: document.getElementById('editDescription').value,
+                EventStart: new Date(convertLocalToUTC(document.getElementById('editStartTime').value)),
+                EventEnd: new Date(convertLocalToUTC(document.getElementById('editEndTime').value))
+            };
+            if (eventData.EventStart >= eventData.EventEnd){
+                alert("Start date must be before end date");
+                return;
+            }
+
+            const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value; // Gets the anti forgery token
+            try {
+                const response = await fetch('/Day/EditEvent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': antiForgeryToken
+                    },
+                    body: JSON.stringify({ Token: token, EventData: eventData }) // Token is sent alongside data for identification
+
+                });
+                if (response.ok) {
+                    alert("Event updated successfully!");
+                    document.getElementById('editEventModal').style.display = 'none';
+                    fetchEvents();
+                } else {
+                    alert("Event update failed!");
+                }
+            } catch (error) {
+                console.error("Error modifying event:", error);
+            }
+        });
+
+        // Handles new event creation sending a request to controller
+        addEventForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+    
+            // Gets form data
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const startTime = document.getElementById('startTime').value;
+            const totalMinutes = timeToMinutes(startTime);
+            const totalMinutes2 = timeToMinutes(`${document.getElementById('duration').value.padStart(2, '0')}:00`);
+            const endTime = minutesToTime(totalMinutes + totalMinutes2);
+            const startDateTime = getDateTime(startTime).toISOString();
+            const endDateTime = getDateTime(endTime).toISOString();
+            const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+            // Create the event matching the backend model
+            const eventData = {
+                Title: title,
+                Description: description,
+                EventStart: startDateTime,
+                EventEnd: endDateTime,
+                LastUpdated: new Date().toISOString() // Current time
+            };
+
+             if (eventData.EventStart >= eventData.EventEnd){
+                alert("Start date must be before end date");
+                return;
+            }
+
+            try {
+                // Make the POST request
+                const response = await fetch('/Day/AddEvent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': antiForgeryToken // Passes the anti forgery token
+                    },
+                    body: JSON.stringify(eventData) 
+                });
+
+                // Error handling for the response
+                if (response.ok) {
+                    alert("Event added successfully");
+                    fetchEvents()
+                } else if (response.status === 409) {
+                    alert("Event with this ID already exists");
+                } else {
+                    alert("Error adding event.");
+                }
+            } catch (error) {
+                console.error('Error ', error);
+            }
+        });
+
+        // Sends a request to get all events for the month
+        async function fetchEvents() {
+            var date = getDateTime('00:00').toISOString();     
+                const response = await fetch(`/Day/EventList?queryDate=${date}`); 
+                if (!response.ok) {
+                    throw new Error("Network response is not ok");
+                }
+                const events = await response.json();
+                console.log(events);
+
+                container.innerHTML = ''; // Clears events
+
+                // Process the events and displays them
+                events.forEach(event => {
+                    const startTime = new Date(toLocalTime(event.eventStart));
+                    const endTime = new Date(toLocalTime(event.eventEnd));
+                    displayEvent(event.title, event.description, startTime, endTime, event.token); // Passes the token
+                });
+        }
+        
+        // This function makes a request to have a event updated
+        async function editEvent(token) {
+            try {
+                const response = await fetch('/Day/EditEvent?token=${encodeURIComponent(token)}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedEventData)
+                });
+                if (response.ok) {
+                    alert("Event updated successfully!");
+                } else {
+                    alert("Error updating event.");
+                }
+            } catch (error) {
+                console.error("Error modifying event:", error);
+            }
+        }
+        
+        // Helps to convert from utc to local time
+        function toLocalTime(time) {
+            const utcStartTime = new Date(time);
+            const localTime = new Date(utcStartTime.getTime() - (utcStartTime.getTimezoneOffset() * 60000));
+            return localTime;
+        }
+
+        // These helper functions help convert between utc and local time
+        function formatDateToLocalISOString(startTime) {  
+            const year = startTime.getFullYear();
+            const month = String(startTime.getMonth() + 1).padStart(2, '0'); 
+            const day = String(startTime.getDate()).padStart(2, '0'); 
+            const hours = String(startTime.getHours()).padStart(2, '0'); 
+            const minutes = String(startTime.getMinutes()).padStart(2, '0'); 
+
+            const localStartTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            return localStartTime;
+        }
+
+        function convertLocalToUTC(localDateTime) {
+            const localDate = new Date(localDateTime);
+            const utcYear = localDate.getUTCFullYear();
+            const utcMonth = String(localDate.getUTCMonth() + 1).padStart(2, '0'); 
+            const utcDate = String(localDate.getUTCDate()).padStart(2, '0');
+            const utcHours = String(localDate.getUTCHours()).padStart(2, '0');
+            const utcMinutes = String(localDate.getUTCMinutes()).padStart(2, '0');
+
+            return `${utcYear}-${utcMonth}-${utcDate}T${utcHours}:${utcMinutes}:00.000Z`;
+        }
+
+        // this function adds divs for each element and positions them based on their time and duration
+        function displayEvent(title, description, startTime, endTime, token) {
+            var dayBegin = getDateTime('00:00').getTime();
+            var dayEnd = getDateTime('23:59').getTime();
+
+            const event = document.createElement('div');
+            event.classList.add('event', 'resizable');
+            event.title = title;
+
+            const header = document.createElement('h3');
+            header.textContent = title;
+            const paragraph = document.createElement('p');
+            paragraph.textContent = description;
+
+            event.appendChild(header);
+            event.appendChild(paragraph);
+  
+            const startPosition = Math.max(((startTime.getTime() - dayBegin) / (1000 * 60 * 60)), 0);
+            const endPosition = Math.min(((  (endTime.getTime() - dayBegin) / (1000 * 60 * 60)) - startPosition), 24);
+
+            event.style.top = `${startPosition * 100}px`;
+            event.style.height = `${(endPosition) * 100}px`;
+
+            // This brings up and fills the edit event model  
+            event.addEventListener('click', () => {
+                document.getElementById('editTitle').value = title;
+                document.getElementById('editDescription').value = description;
+
+                document.getElementById('editStartTime').value = formatDateToLocalISOString(startTime);
+                document.getElementById('editEndTime').value = formatDateToLocalISOString(endTime); 
+                    
+                document.getElementById('eventToken').value = token;
+                document.getElementById('editEventModal').style.display = 'flex';
+            });
+            container.appendChild(event);
+        }
+    </script>
+</body>

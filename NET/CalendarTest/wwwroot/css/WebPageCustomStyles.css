@@ -1,0 +1,157 @@
+﻿* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden; /* Prevent scrolling on the body */
+}
+
+
+
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    max-width: 300px;
+    margin: 20px auto;
+}
+
+.day {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.header {
+    grid-column: span 7;
+    text-align: center;
+    font-weight: bold;
+}
+
+.month-selector {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+select {
+    padding: 5px;
+    margin: 0 5px;
+}
+
+.scrollable-timetable {
+    height: 95vh; /* Adjust this value to control the timetable height */
+    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-x: hidden; /* Disable horizontal scrolling */
+    border: 1px solid #ccc; /* Optional: adds a border around the timetable */
+    padding: 10px;
+    background-color: #f9f9f9; /* Optional: background color */
+    width: 620px; /* Set width to fit .timetable */
+}
+
+.timetable {
+    display: flex;
+    border: 1px solid #ccc;
+    width: 100%; /* Make sure it fits within the .scrollable-timetable */
+    height: auto; /* Let height grow based on content */
+    position: relative;
+    overflow-x: hidden; /* Ensure no horizontal overflow */
+}
+
+.hours {
+    width: 100px;
+    border-right: 1px solid #ccc;
+    overflow: hidden;
+}
+
+.hour {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
+}
+
+.events-container {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.event {
+    position: absolute;
+    background-color: rgba(0, 150, 255, 0.8);
+    color: white;
+    padding: 5px;
+    cursor: move;
+    border-radius: 4px;
+    user-select: none;
+    width: 100%; /* Ensure events take up full width */
+}
+
+    .event.resizable {
+        resize: vertical;
+        overflow: hidden;
+    }
+
+/* Button Styles */
+.back-button, .add-button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .back-button:hover, .add-button:hover {
+        background-color: #0056b3;
+    }
+
+/* Popup modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.modal input, .modal label {
+    margin: 10px 0;
+    display: block;
+    width: 100%;
+}
+
+.modal button {
+    margin-top: 10px;
+}
+
+
